@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Calculadora de Dano - Cabal Online</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <h1>Cabal Damage Lab</h1>
+    <nav>
+      <button class="tab-btn active" data-tab="calc">Calculadora</button>
+      <button class="tab-btn" data-tab="bosses">Chefes</button>
+      <button class="tab-btn" data-tab="equiv">Equivalências</button>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Aba Calculadora -->
+    <section id="tab-calc" class="tab active">
+      <div class="grid">
+        <!-- Player -->
+        <div class="card">
+          <h2>Status do Player</h2>
+          <div class="grid two">
+            <label>
+              Ataque
+              <input id="atk" type="number" min="0" value="5000" />
+            </label>
+            <label>
+              +Todos os Ataques (%)
+              <input id="allAtkPct" type="number" min="0" value="0" />
+            </label>
+            <label>
+              Amp Total (%)
+              <input id="amp" type="number" min="0" value="60" />
+            </label>
+            <label>
+              Taxa Crítica (%)
+              <input id="cr" type="number" min="0" max="100" value="50" />
+            </label>
+            <label>
+              Dano Crítico (%)
+              <input id="cd" type="number" min="0" value="120" />
+            </label>
+            <label>
+              Perfuração
+              <input id="pen" type="number" min="0" value="2000" />
+            </label>
+            <label>
+              Dano Adicional
+              <input id="addDmg" type="number" min="0" value="0" />
+            </label>
+            <label>
+              Aum. Dano Normal (%)
+              <input id="normalInc" type="number" min="0" value="0" />
+            </label>
+            <label>
+              Aum. Dano Final (%)
+              <input id="finalInc" type="number" min="0" value="0" />
+            </label>
+            <label>
+              Ignorar Res. DC
+              <input id="ignoreResCD" type="number" min="0" value="0" />
+            </label>
+            <label>
+              Ignorar Res. Amp
+              <input id="ignoreResAmp" type="number" min="0" value="0" />
+            </label>
+          </div>
+        </div>
+
+        <!-- Boss -->
+        <div class="card">
+          <h2>Dungeon e Boss</h2>
+          <label>
+            Procurar boss
+            <input id="bossSearch" type="text" placeholder="Digite parte do nome..." />
+          </label>
+          <label>
+            Boss
+            <select id="bossSelect"></select>
+          </label>
+
+          <div id="bossStats" class="boss-stats">
+            <div><strong>Dungeon:</strong> <span id="bDungeon">—</span></div>
+            <div><strong>Nível:</strong> <span id="bLevel">—</span></div>
+            <div><strong>HP:</strong> <span id="bHP">—</span></div>
+            <div><strong>Defesa:</strong> <span id="bDef">—</span></div>
+            <div><strong>Perfuração (Boss):</strong> <span id="bPen">—</span></div>
+            <div><strong>Redução de Dano:</strong> <span id="bDR">—</span></div>
+            <div><strong>Res. Dano Crítico:</strong> <span id="bRCD">—</span></div>
+            <div><strong>Res. Taxa Crítica:</strong> <span id="bRCR">—</span></div>
+            <div><strong>Ignorar Perfuração:</strong> <span id="bIgnorePen">—</span></div>
+            <div><strong>Res. Skill Amp:</strong> <span id="bRSA">—</span></div>
+            <div><strong>Evasão:</strong> <span id="bEva">—</span></div>
+            <div><strong>Acerto:</strong> <span id="bAcc">—</span></div>
+          </div>
+        </div>
+
+        <!-- Resultado -->
+        <div class="card highlight">
+          <h2>Resultado</h2>
+          <div class="results">
+            <div class="row">
+              <span>Dano Normal</span><strong id="outNormal">—</strong>
+            </div>
+            <div class="row">
+              <span>Dano Crítico</span><strong id="outCrit">—</strong>
+            </div>
+            <div class="row">
+              <span>Dano Esperado</span><strong id="outExpected">—</strong>
+            </div>
+          </div>
+
+          <details class="details">
+            <summary>Ver detalhamento</summary>
+            <pre id="breakdown"></pre>
+          </details>
+
+          <button id="calcBtn" class="primary">Calcular</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Aba Chefes (lista completa + instruções de edição) -->
+    <section id="tab-bosses" class="tab">
+      <div class="card">
+        <h2>Chefes carregados (exemplos)</h2>
+        <p>Estes dados seguem os campos do banco de monstros (Defesa, Redução de Dano, Resistências, etc.). Você pode ampliar a lista no arquivo script.js (seção BOSS_DATA).</p>
+        <div id="bossTable"></div>
+      </div>
+
+      <div class="card">
+        <h3>Como adicionar/editar chefes</h3>
+        <ol>
+          <li>Abra o arquivo <code>script.js</code> e procure por <code>BOSS_DATA</code>.</li>
+          <li>Copie um bloco existente, altere o <em>name</em>, <em>dungeon</em> e os valores.</li>
+          <li>Salve e recarregue a página.</li>
+        </ol>
+        <p>Os campos refletem os que aparecem na cobrpower e no banco da Nipperlug. Se preferir, me diga a dungeon/boss que quer e eu preencho para você.</p>
+      </div>
+    </section>
+
+    <!-- Aba Equivalências -->
+    <section id="tab-equiv" class="tab">
+      <div class="card">
+        <h2>Tabela de Equivalência (referência)</h2>
+        <p>Valores estáticos comuns na comunidade para comparar upgrades. Use como guia rápido, não entra no cálculo principal.</p>
+        <table class="eq-table">
+          <thead>
+            <tr><th>Conversão</th><th>Equivalência</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Atk por 1 Amp</td><td>14.2</td></tr>
+            <tr><td>Atk por 1 DC</td><td>7.4</td></tr>
+            <tr><td>Atk por 1 Perf</td><td>2.2</td></tr>
+            <tr><td>DC por 1 Amp</td><td>1.9</td></tr>
+            <tr><td>Perf por 1 DC</td><td>3.2</td></tr>
+          </tbody>
+        </table>
+        <div class="grid two">
+          <label>
+            Escolha o atributo base
+            <select id="eqBase">
+              <option value="atk">Ataque</option>
+              <option value="amp">Amp</option>
+              <option value="dc">Dano Crítico</option>
+              <option value="pen">Perfuração</option>
+            </select>
+          </label>
+          <label>
+            Valor
+            <input id="eqValue" type="number" step="0.1" value="1" />
+          </label>
+        </div>
+        <div id="eqOut" class="eq-out"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <span>Base de layout/campos inspirada na cobrpower; stats de bosses seguem estrutura do Nipperlug. Ajustes finos sob medida para sua classe/dungeon.</span>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
