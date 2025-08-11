@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cabal Damage Lab — Futuristic</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Neon background layers -->
+  <div class="bg fx-aurora"></div>
+  <div class="bg fx-grid"></div>
+  <div class="bg fx-noise"></div>
+
+  <!-- SVG Icons sprite -->
+  <svg width="0" height="0" class="hidden">
+    <symbol id="i-class" viewBox="0 0 24 24">
+      <path fill="currentColor" d="M12 2l4 6l-4 4l-4-4l4-6Zm-6 9l6 6l6-6l2 2l-8 8l-8-8l2-2Z"/>
+    </symbol>
+    <symbol id="i-sword" viewBox="0 0 24 24">
+      <path fill="currentColor" d="M14.1 7.05L21 0l3 3l-7.05 6.9l.05 2.1l-8.99 9L5 20l9-9l2.1.1Z"/>
+    </symbol>
+    <symbol id="i-crit" viewBox="0 0 24 24">
+      <path fill="currentColor" d="M12 2l2.5 5.5L20 10l-5.5 2.5L12 18l-2.5-5.5L4 10l5.5-2.5L12 2Z"/>
+    </symbol>
+    <symbol id="i-amp" viewBox="0 0 24 24">
+      <path fill="currentColor" d="M13 2L3 14h6l-2 8l10-12h-6l2-8Z"/>
+    </symbol>
+    <symbol id="i-pen" viewBox="0 0 24 24">
+      <path fill="currentColor" d="M14 3l7 7l-2 2l-7-7l2-2Zm-3 3L2 15v7h7l9-9l-7-7Z"/>
+    </symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24">
+      <path fill="currentColor" d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2h6Z"/>
+    </symbol>
+    <symbol id="i-rocket" viewBox="0 0 24 24">
+      <path fill="currentColor" d="M12 2c4 0 7 3 7 7c0 3-2 6-5 7l-1 6l-2-3l-3 1l1-4c-3-1-5-4-5-7c0-4 3-7 8-7Zm-5 18l1-3l2 2l-3 1Z"/>
+    </symbol>
+    <symbol id="i-gauge" viewBox="0 0 24 24">
+      <path fill="currentColor" d="M12 3a9 9 0 1 1-9 9h2a7 7 0 1 0 7-7V3Zm-1 9l6-6l1.4 1.4L12.8 14H11v-2Z"/>
+    </symbol>
+    <symbol id="i-shield-off" viewBox="0 0 24 24">
+      <path fill="currentColor" d="M12 2l7 4v6c0 5-3 8-7 10C8 20 5 17 5 12V6l7-4Zm7.3 16.9l-1.4 1.4L3.7 6.1L5.1 4.7l14.2 14.2Z"/>
+    </symbol>
+    <symbol id="i-bolt-off" viewBox="0 0 24 24">
+      <path fill="currentColor" d="M13 2L3 14h6l-2 8l4.5-5l5.4 5.4l1.4-1.4L6.8 7.7L13 2Z"/>
+    </symbol>
+    <symbol id="i-info" viewBox="0 0 24 24">
+      <path fill="currentColor" d="M11 9h2v8h-2V9Zm0-4h2v2h-2V5Z"/>
+    </symbol>
+  </svg>
+
+  <header class="topbar glass">
+    <div class="brand">
+      <span class="glow-dot"></span>
+      <h1>Cabal Damage Lab</h1>
+      <span class="tag">Futuristic</span>
+    </div>
+    <nav class="tabs">
+      <button class="tab-btn active" data-tab="calc">Calculadora</button>
+      <button class="tab-btn" data-tab="bosses">Chefes</button>
+      <button class="tab-btn" data-tab="equiv">Equivalências</button>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Calculadora -->
+    <section id="tab-calc" class="tab active">
+      <div class="grid g3">
+        <!-- Classe e Dungeon/Boss -->
+        <div class="card glass">
+          <h2>Setup</h2>
+          <div class="grid g2">
+            <label class="with-icon">
+              <span class="icon"><svg><use href="#i-class"/></svg></span>
+              <span>Classe</span>
+              <select id="cls">
+                <option>Mago negro</option>
+                <option>Duelista</option>
+                <option>Mago</option>
+                <option>Arqueiro Arcano</option>
+                <option>Espadachim Arcano</option>
+                <option>Atirador Arcano</option>
+                <option>Guerreiro</option>
+                <option>Gladiador</option>
+                <option>Guardiao Arcano</option>
+              </select>
+            </label>
+
+            <label>
+              Dungeon
+              <select id="dungeonSelect"></select>
+            </label>
+
+            <label>
+              Boss
+              <select id="bossSelect"></select>
+            </label>
+
+            <div class="hint">
+              <svg class="ico"><use href="#i-info"/></svg>
+              <span>Escolha a dungeon para filtrar os bosses. Você pode editar/expandir a lista no script.</span>
+            </div>
+          </div>
+
+          <div class="boss-stats">
+            <div><strong>Dungeon:</strong> <span id="bDungeon">—</span></div>
+            <div><strong>Nível:</strong> <span id="bLevel">—</span></div>
+            <div><strong>HP:</strong> <span id="bHP">—</span></div>
+            <div><strong>Defesa:</strong> <span id="bDef">—</span></div>
+            <div><strong>Perfuração (Boss):</strong> <span id="bPen">—</span></div>
+            <div><strong>Redução de Dano:</strong> <span id="bDR">—</span></div>
+            <div><strong>Res. Dano Crítico:</strong> <span id="bRCD">—</span></div>
+            <div><strong>Res. Taxa Crítica:</strong> <span id="bRCR">—</span></div>
+            <div><strong>Ignorar Perfuração:</strong> <span id="bIgnorePen">—</span></div>
+            <div><strong>Res. Skill Amp:</strong> <span id="bRSA">—</span></div>
+          </div>
+        </div>
+
+        <!-- Status do Player -->
+        <div class="card glass">
+          <h2>Status do Player</h2>
+          <div class="grid g2">
+            <label class="with-icon">
+              <span class="icon"><svg><use href="#i-sword"/></svg></span>
+              <span>Ataque</span>
+              <input id="atk" type="number" min="0" value="5000" />
+            </label>
+
+            <label class="with-icon">
+              <span class="icon"><svg><use href="#i-plus"/></svg></span>
+              <span>+Todos os Ataques (%)</span>
+              <input id="allAtkPct" type="number" min="0" value="0" />
+            </label>
+
+            <label class="with-icon">
+              <span class="icon"><svg><use href="#i-amp"/></svg></span>
+              <span>Todas as Técnicas Amp (%)</span>
+              <input id="amp" type="number" min="0" value="60" />
+            </label>
+
+            <label class="with-icon">
+              <span class="icon"><svg><use href="#i-gauge"/></svg></span>
+              <span>Taxa Crítica (%)</span>
+              <input id="cr" type="number" min="0" max="100" value="50" />
+            </label>
+
+            <label class="with-icon">
+              <span class="icon"><svg><use href="#i-crit"/></svg></span>
+              <span>Dano Crítico (%)</span>
+              <input id="cd" type="number" min="0" value="120" />
+            </label>
+
+            <label class="with-icon">
+              <span class="icon"><svg><use href="#i-pen"/></svg></span>
+              <span>Perfuração</span>
+              <input id="pen" type="number" min="0" value="2000" />
+            </label>
+
+            <label class="with-icon">
+              <span class="icon"><svg><use href="#i-plus"/></svg></span>
+              <span>Dano Adicional</span>
+              <input id="addDmg" type="number" min="0" value="0" />
+            </label>
+
+            <label class="with-icon">
+              <span class="icon"><svg><use href="#i-plus"/></svg></span>
+              <span>Aumento do Dano Normal (%)</span>
+              <input id="normalInc" type="number" min="0" value="0" />
+            </label>
+
+            <label class="with-icon">
+              <span class="icon"><svg><use href="#i-rocket"/></svg></span>
+              <span>Aumento do Dano Final (%)</span>
+              <input id="finalInc" type="number" min="0" value="0" />
+            </label>
+
+            <label class="with-icon">
+              <span class="icon"><svg><use href="#i-shield-off"/></svg></span>
+              <span>Cancelar Ign. Perfuração</span>
+              <input id="cancelIgnorePen" type="number" min="0" value="0" />
+            </label>
+
+            <label class="with-icon">
+              <span class="icon"><svg><use href="#i-crit"/></svg></span>
+              <span>Ignorar Res. Dano Crítico</span>
+              <input id="ignoreResCD" type="number" min="0" value="0" />
+            </label>
+
+            <label class="with-icon">
+              <span class="icon"><svg><use href="#i-bolt-off"/></svg></span>
+              <span>Ignorar Res. Skill Amp</span>
+              <input id="ignoreResAmp" type="number" min="0" value="0" />
+            </label>
+          </div>
+        </div>
+
+        <!-- Resultado -->
+        <div class="card glass highlight">
+          <h2>Resultado</h2>
+          <div class="results">
+            <div class="row">
+              <span>Dano Normal</span><strong id="outNormal">—</strong>
+            </div>
+            <div class="row">
+              <span>Dano Crítico</span><strong id="outCrit">—</strong>
+            </div>
+            <div class="row">
+              <span>Dano Esperado</span><strong id="outExpected">—</strong>
+            </div>
+          </div>
+
+          <details class="details">
+            <summary>Ver detalhamento</summary>
+            <pre id="breakdown"></pre>
+          </details>
+
+          <button id="calcBtn" class="primary">Calcular</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Chefes -->
+    <section id="tab-bosses" class="tab">
+      <div class="card glass">
+        <h2>Chefes</h2>
+        <div id="bossTable"></div>
+      </div>
+
+      <div class="card glass">
+        <h3>Como adicionar/editar chefes</h3>
+        <ol>
+          <li>No <code>script.js</code>, edite <code>BOSS_DATA</code>.</li>
+          <li>Informe dungeon, defesa, resistências e demais campos.</li>
+          <li>Salve e recarregue a página.</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- Equivalências -->
+    <section id="tab-equiv" class="tab">
+      <div class="card glass">
+        <h2>Equivalências dinâmicas</h2>
+        <p>Calculadas no seu ponto atual (marginais). Escolha o alvo e veja quanto dos outros atributos geram o mesmo ganho de dano.</p>
+        <div class="grid g3">
+          <label>
+            Atributo alvo (Δ)
+            <select id="eqTarget">
+              <option value="amp">+1% Amp</option>
+              <option value="cd">+1% Dano Crítico</option>
+              <option value="cr">+1% Taxa Crítica</option>
+              <option value="atk">+100 Ataque</option>
+              <option value="pen">+100 Perfuração</option>
+              <option value="finalInc">+1% Dano Final</option>
+              <option value="normalInc">+1% Dano Normal</option>
+              <option value="addDmg">+100 Dano Adicional</option>
+            </select>
+          </label>
+          <label>
+            Modo de saída
+            <select id="eqMode">
+              <option value="expected">Dano Esperado</option>
+              <option value="crit">Dano Crítico</option>
+              <option value="normal">Dano Normal</option>
+            </select>
+          </label>
+          <div class="hint">
+            <svg class="ico"><use href="#i-info"/></svg>
+            <span>Use para comparar upgrades reais do seu build atual.</span>
+          </div>
+        </div>
+        <div id="eqOut" class="eq-out"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <span>Design neon/glass inspirado em interfaces futuristas. Ajuste fino dos cálculos e dados de boss conforme sua região/servidor.</span>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
